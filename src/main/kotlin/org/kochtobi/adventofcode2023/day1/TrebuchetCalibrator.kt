@@ -1,71 +1,66 @@
 package org.kochtobi.adventofcode2023.day1
 
-/**
- * TODO!
- * <b>short description</b>
- *
- * <p>detailed description</p>
- *
- * @since <version tag>
- */
 class TrebuchetCalibrator {
+    val spelledOutDigits = "one|two|three|four|five|six|seven|eight|nine|\\d".toRegex()
 
-    fun readInput(location: String): List<String> {
+    enum class SpelledOutDigits(val spelling: String, val digit: Int) {
+        ONE("one", 1),
+        TWO("two", 2),
+        THREE("three", 3),
+        FOUR("four", 4),
+        FIVE("five", 5),
+        SIX("six", 6),
+        SEVEN("seven", 7),
+        EIGHT("eight", 8),
+        NINE("nine", 9);
+
+        companion object {
+            fun toDigit(spelling: String): Int? {
+                return entries.find { it.spelling == spelling }?.digit
+            }
+        }
+    }
+    private fun readInput(location: String): List<String> {
         val inputStream = this::class.java.getResourceAsStream(location)
-        val lines = inputStream?.bufferedReader()?.readLines()
-        return lines!!
+        return inputStream?.bufferedReader()?.readLines() ?: listOf()
     }
 
-    enum class SpelledDigit(val index: Int, val string: String, val digit: Int) {
-
+    fun extractCalibration(
+        input: String,
+        pattern: Regex = spelledOutDigits
+    ): DigitPair {
+        val firstMatch = pattern.find(input)?.value!!
+        val lastMatch = pattern.findAll(input).last().value
+        return DigitPair.create(firstMatch, lastMatch)
     }
 
-    fun replaceLettersWithDigits(input: String): String {
+    data class DigitPair(val first: Int, val second: Int){
+        fun combined(): Int {
+            return "$first$second".toInt()
+        }
 
-        val idx1 = input.indexOf("one")
-        val idx2 = input.indexOf("two")
-        val idx3 = input.indexOf("three")
-        val idx4 = input.indexOf("four")
-        val idx5 = input.indexOf("five")
-        val idx6 = input.indexOf("six")
-        val idx7 = input.indexOf("seven")
-        val idx8 = input.indexOf("eight")
-        val idx9 = input.indexOf("nine")
-        listOf(idx1,idx2,idx3,idx4,)
-
-        return input.replace("one", "1")
-            .replace("two", "2")
-            .replace("three", "3")
-            .replace("four", "4")
-            .replace("five", "5")
-            .replace("six", "6")
-            .replace("seven", "7")
-            .replace("eight", "8")
-            .replace("nine", "9")
+        companion object {
+            fun create(first: Int, second: Int) : DigitPair {
+                return DigitPair(first = first, second = second)
+            }
+            fun create(first: String, second: String) : DigitPair {
+                val parsedFirst = first.toIntOrNull() ?: SpelledOutDigits.toDigit(first)!!
+                val parsedLast = second.toIntOrNull() ?: SpelledOutDigits.toDigit(second)!!
+                return DigitPair(first = parsedFirst, second = parsedLast)
+            }
+        }
     }
 
-    fun extractCalibration(input: String): Int {
-        val isDigitPredicate = { character: Char -> character.isDigit() }
-        val lastDigit = input.findLast(isDigitPredicate)
-        val firstDigit = input.find(isDigitPredicate)
-        return "$firstDigit$lastDigit".toInt()
-    }
+
 
     fun run(part: Int = 2, location: String): List<Int> {
         return when (part) {
-            1 -> {
+            1,2 -> {
                 readInput(location).stream()
                     .map(this::extractCalibration)
+                    .map(DigitPair::combined)
                     .toList()
             }
-
-            2 -> {
-                readInput(location).stream()
-                    .map(this::replaceLettersWithDigits)
-                    .map(this::extractCalibration)
-                    .toList()
-            }
-
             else -> {
                 listOf()
             }

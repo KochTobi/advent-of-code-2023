@@ -2,16 +2,16 @@ package org.kochtobi.adventofcode2023.day1
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestFactory
 
 
 //@SpringBootTest
 class TrebuchetCalibratorTest {
 
+
     @Test
     fun extractDigitsFromString() {
         val trebuchetCalibrator = TrebuchetCalibrator()
-        Assertions.assertEquals(42, trebuchetCalibrator.extractCalibration("42"))
+        Assertions.assertEquals(42, trebuchetCalibrator.extractCalibration("42").combined())
     }
 
     @Test
