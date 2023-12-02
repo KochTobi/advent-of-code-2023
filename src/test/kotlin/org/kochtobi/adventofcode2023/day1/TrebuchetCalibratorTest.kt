@@ -17,7 +17,7 @@ class TrebuchetCalibratorTest {
     @Test
     fun testPartOne() {
         val trebuchetCalibrator = TrebuchetCalibrator()
-        val calibrationValues = trebuchetCalibrator.run(1,"/input/day1/part1-test-input.txt")
+        val calibrationValues = trebuchetCalibrator.run("/input/day1/part1-test-input.txt")
         Assertions.assertIterableEquals(
             listOf(12, 38, 15, 77),
             calibrationValues
@@ -28,7 +28,7 @@ class TrebuchetCalibratorTest {
     @Test
     fun runPartOne() {
         val trebuchetCalibrator = TrebuchetCalibrator()
-        val calibrationValues = trebuchetCalibrator.run(1,"/input/day1/part1.txt")
+        val calibrationValues = trebuchetCalibrator.run("/input/day1/part1.txt")
         println(
             "The sum of the calibration values is ${calibrationValues.sum()}"
         )
@@ -37,7 +37,7 @@ class TrebuchetCalibratorTest {
     @Test
     fun testPartTwo() {
         val trebuchetCalibrator = TrebuchetCalibrator()
-        val calibrationValues = trebuchetCalibrator.run(2, "/input/day1/part2-test-input.txt")
+        val calibrationValues = trebuchetCalibrator.run("/input/day1/part2-test-input.txt")
         Assertions.assertIterableEquals(
             listOf(29, 83, 13, 24, 42, 14, 76),
             calibrationValues

@@ -20,6 +20,7 @@ class TrebuchetCalibrator {
             }
         }
     }
+
     private fun readInput(location: String): List<String> {
         val inputStream = this::class.java.getResourceAsStream(location)
         return inputStream?.bufferedReader()?.readLines() ?: listOf()
@@ -27,23 +28,23 @@ class TrebuchetCalibrator {
 
     fun extractCalibration(
         input: String,
-        pattern: Regex = spelledOutDigits
     ): DigitPair {
-        val firstMatch = pattern.find(input)?.value!!
-        val lastMatch = pattern.findAll(input).last().value
+        val firstMatch = spelledOutDigits.find(input)?.value!!
+        val lastMatch = spelledOutDigits.findAll(input).last().value
         return DigitPair.create(firstMatch, lastMatch)
     }
 
-    data class DigitPair(val first: Int, val second: Int){
+    data class DigitPair(val first: Int, val second: Int) {
         fun combined(): Int {
             return "$first$second".toInt()
         }
 
         companion object {
-            fun create(first: Int, second: Int) : DigitPair {
+            fun create(first: Int, second: Int): DigitPair {
                 return DigitPair(first = first, second = second)
             }
-            fun create(first: String, second: String) : DigitPair {
+
+            fun create(first: String, second: String): DigitPair {
                 val parsedFirst = first.toIntOrNull() ?: SpelledOutDigits.toDigit(first)!!
                 val parsedLast = second.toIntOrNull() ?: SpelledOutDigits.toDigit(second)!!
                 return DigitPair(first = parsedFirst, second = parsedLast)
@@ -52,18 +53,10 @@ class TrebuchetCalibrator {
     }
 
 
-
-    fun run(part: Int = 2, location: String): List<Int> {
-        return when (part) {
-            1,2 -> {
-                readInput(location).stream()
-                    .map(this::extractCalibration)
-                    .map(DigitPair::combined)
-                    .toList()
-            }
-            else -> {
-                listOf()
-            }
-        }
+    fun run(location: String): List<Int> {
+        return readInput(location).stream()
+            .map(this::extractCalibration)
+            .map(DigitPair::combined)
+            .toList()
     }
 }
