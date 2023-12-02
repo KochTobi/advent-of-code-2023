@@ -1,7 +1,9 @@
 package org.kochtobi.adventofcode2023.day1
 
 class TrebuchetCalibrator {
+    val onlyDigits = "\\d".toRegex()
     val spelledOutDigits = "one|two|three|four|five|six|seven|eight|nine|\\d".toRegex()
+    val spelledOutDigitsReversed = "eno|owt|eerht|ruof|evif|xis|neves|thgie|enin|\\d".toRegex()
 
     enum class SpelledOutDigits(val spelling: String, val digit: Int) {
         ONE("one", 1),
@@ -28,9 +30,11 @@ class TrebuchetCalibrator {
 
     fun extractCalibration(
         input: String,
+        regex: Regex = onlyDigits,
+        reversedRegex: Regex = onlyDigits
     ): DigitPair {
-        val firstMatch = spelledOutDigits.find(input)?.value!!
-        val lastMatch = spelledOutDigits.findAll(input).last().value
+        val firstMatch = regex.find(input)?.value!!
+        val lastMatch = reversedRegex.find(input.reversed())?.value?.reversed()!!
         return DigitPair.create(firstMatch, lastMatch)
     }
 
@@ -53,9 +57,11 @@ class TrebuchetCalibrator {
     }
 
 
-    fun run(location: String): List<Int> {
+    fun run(part: Int, location: String): List<Int> {
+        val regex = if (part == 1) onlyDigits else spelledOutDigits
+        val reversedRegex = if(part == 1) onlyDigits else spelledOutDigitsReversed
         return readInput(location).stream()
-            .map(this::extractCalibration)
+            .map { this.extractCalibration(it, regex, reversedRegex) }
             .map(DigitPair::combined)
             .toList()
     }
